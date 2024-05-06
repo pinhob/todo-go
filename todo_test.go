@@ -31,3 +31,16 @@ func TestComplete(t *testing.T) {
 		t.Errorf("got %t but expected true", got)
 	}
 }
+
+func TestDelete(t *testing.T) {
+	ls := todo.List{}
+	task := "task 2"
+
+	ls.Add(task)
+	ls.Delete(1)
+
+	if len(ls) > 0 {
+		t.Errorf("list should be empty, but got %v", len(ls))
+		t.Errorf("%v", ls[0])
+	}
+}

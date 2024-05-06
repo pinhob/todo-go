@@ -26,3 +26,8 @@ func (l *List) Complete(taskNumber int) {
 	ls := *l
 	ls[taskNumber-1].Done = true
 }
+
+func (l *List) Delete(taskNumber int) {
+	ls := *l
+	*l = append(ls[:taskNumber-1], ls[taskNumber:]...)
+}
