@@ -21,3 +21,8 @@ func (l *List) Add(task string) {
 
 	*l = append(*l, &newTask)
 }
+
+func (l *List) Complete(taskNumber int) {
+	ls := *l
+	ls[taskNumber-1].Done = true
+}
