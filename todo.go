@@ -65,7 +65,14 @@ func (l *List) Load(fileName string) (List, error) {
 	file, err := os.ReadFile(fileName)
 
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, nil
+		}
 		return nil, err
+	}
+
+	if len(file) == 0 {
+		return nil, nil
 	}
 
 	if err := json.Unmarshal(file, &list); err != nil {
