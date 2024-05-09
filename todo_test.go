@@ -52,3 +52,26 @@ func TestDelete(t *testing.T) {
 		t.Errorf("%v", ls[0])
 	}
 }
+
+func TestSave(t *testing.T) {
+	ls := todo.List{}
+	task := "task 1"
+	ls.Add(task)
+
+	saveErr := ls.Save("test")
+	if saveErr != nil {
+		t.Errorf("Got error '%s' when saving file", saveErr)
+	}
+
+	list, loadErr := ls.Load(".todo.json")
+
+	if loadErr != nil {
+		t.Errorf("Got error '%s' when loading file", loadErr)
+	}
+
+	got := list[0].Task
+
+	if got != task {
+		t.Errorf("want task %s, got %s", task, got)
+	}
+}
