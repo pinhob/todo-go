@@ -6,6 +6,8 @@ import (
 	"github.com/pinhob/todo-go"
 )
 
+const fileName = ".todo.json"
+
 func TestAdd(t *testing.T) {
 	ls := todo.List{}
 	task := "task 1"
@@ -58,12 +60,12 @@ func TestSave(t *testing.T) {
 	task := "task 1"
 	ls.Add(task)
 
-	saveErr := ls.Save("test")
+	saveErr := ls.Save(fileName)
 	if saveErr != nil {
 		t.Errorf("Got error '%s' when saving file", saveErr)
 	}
 
-	list, loadErr := ls.Load(".todo.json")
+	list, loadErr := ls.Load(fileName)
 
 	if loadErr != nil {
 		t.Errorf("Got error '%s' when loading file", loadErr)

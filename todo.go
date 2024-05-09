@@ -3,7 +3,6 @@ package todo
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"time"
 )
@@ -53,24 +52,12 @@ func (l *List) Delete(taskNumber int) error {
 }
 
 func (l *List) Save(fileName string) error {
-	/*
-		save list to a file with bufio
-		return error if needed
-	*/
-	list, err := json.Marshal(*l)
-
+	list, err := json.Marshal(l)
 	if err != nil {
 		return err
 	}
 
-	fileErr := os.WriteFile(".todo.json", list, 0666)
-
-	if fileErr != nil {
-		fmt.Println("error in write file")
-		return fileErr
-	}
-
-	return nil
+	return os.WriteFile(fileName, list, 0666)
 }
 
 func (l *List) Load(fileName string) (List, error) {
