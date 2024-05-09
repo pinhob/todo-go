@@ -23,7 +23,11 @@ func TestComplete(t *testing.T) {
 	task := "task 1"
 
 	ls.Add(task)
-	ls.Complete(1)
+	err := ls.Complete(1)
+
+	if err != nil {
+		t.Errorf("Got error '%v' when using Complete funcion", err)
+	}
 
 	got := ls[0].Done
 
@@ -37,7 +41,11 @@ func TestDelete(t *testing.T) {
 	task := "task 2"
 
 	ls.Add(task)
-	ls.Delete(1)
+	err := ls.Delete(1)
+
+	if err != nil {
+		t.Errorf("Got error '%v' when using Complete funcion", err)
+	}
 
 	if len(ls) > 0 {
 		t.Errorf("list should be empty, but got %v", len(ls))

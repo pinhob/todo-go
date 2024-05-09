@@ -1,6 +1,9 @@
 package todo
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type item struct {
 	Task        string
@@ -22,12 +25,26 @@ func (l *List) Add(task string) {
 	*l = append(*l, &newTask)
 }
 
-func (l *List) Complete(taskNumber int) {
+func (l *List) Complete(taskNumber int) error {
 	ls := *l
+
+	if taskNumber < 1 || taskNumber > (len(ls)) {
+		return errors.New("invalid task number")
+	}
+
 	ls[taskNumber-1].Done = true
+
+	return nil
 }
 
-func (l *List) Delete(taskNumber int) {
+func (l *List) Delete(taskNumber int) error {
 	ls := *l
+
+	if taskNumber < 1 || taskNumber > (len(ls)) {
+		return errors.New("invalid task number")
+	}
+
 	*l = append(ls[:taskNumber-1], ls[taskNumber:]...)
+
+	return nil
 }
