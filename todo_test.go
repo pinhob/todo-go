@@ -55,20 +55,19 @@ func TestDelete(t *testing.T) {
 	}
 }
 
-func TestSave(t *testing.T) {
+func TestSaveLoad(t *testing.T) {
 	ls := todo.List{}
 	task := "task 1"
 	ls.Add(task)
 
-	saveErr := ls.Save(fileName)
-	if saveErr != nil {
-		t.Errorf("Got error '%s' when saving file", saveErr)
+	if err := ls.Save(fileName); err != nil {
+		t.Errorf("Got error '%s' when saving file", err)
 	}
 
-	list, loadErr := ls.Load(fileName)
+	list, err := ls.Load(fileName)
 
-	if loadErr != nil {
-		t.Errorf("Got error '%s' when loading file", loadErr)
+	if err != nil {
+		t.Errorf("Got error '%s' when loading file", err)
 	}
 
 	got := list[0].Task
