@@ -3,6 +3,7 @@ package todo
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"time"
 )
@@ -75,4 +76,19 @@ func (l *List) Load(fileName string) error {
 	}
 
 	return json.Unmarshal(file, l)
+}
+
+func (l *List) String() string {
+	formatted := ""
+
+	for k, t := range *l {
+		prefix := " "
+		if t.Done {
+			prefix = "X "
+		}
+
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+	}
+
+	return formatted
 }
