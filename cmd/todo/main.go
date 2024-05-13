@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/alexeyco/simpletable"
 	"github.com/pinhob/todo-go"
@@ -33,7 +34,9 @@ func main() {
 		Cells: []*simpletable.Cell{
 			{Align: simpletable.AlignCenter, Text: "#"},
 			{Align: simpletable.AlignCenter, Text: "Task"},
-			{Align: simpletable.AlignCenter, Text: "Complete"},
+			{Align: simpletable.AlignCenter, Text: "Done?"},
+			{Align: simpletable.AlignCenter, Text: "CreatedAt"},
+			{Align: simpletable.AlignCenter, Text: "CompletedAt"},
 		},
 	}
 
@@ -42,12 +45,14 @@ func main() {
 			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", k+1)},
 			{Align: simpletable.AlignCenter, Text: task.Task},
 			{Align: simpletable.AlignCenter, Text: strconv.FormatBool(task.Done)},
+			{Align: simpletable.AlignCenter, Text: task.CreatedAt.Format(time.RFC822)},
+			{Align: simpletable.AlignCenter, Text: task.CompletedAt.Format(time.RFC822)},
 		}
 
 		table.Body.Cells = append(table.Body.Cells, r)
 	}
 
-	table.SetStyle(simpletable.StyleCompact)
+	table.SetStyle(simpletable.StyleUnicode)
 
 	switch {
 	case *list:
