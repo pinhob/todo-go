@@ -82,12 +82,12 @@ func (l *List) String() string {
 	formatted := ""
 
 	for k, t := range *l {
-		prefix := " "
+		prefix := "  "
 		if t.Done {
 			prefix = "X "
 		}
 
-		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k+1, t.Task)
+		formatted += fmt.Sprintf("%s%d: %s\n", prefix, k, t.Task)
 	}
 
 	return formatted

@@ -15,6 +15,7 @@ import (
 func main() {
 	add := flag.Bool("add", false, "Add a new task to your list")
 	list := flag.Bool("list", false, "List all all tasks from your list")
+	complete := flag.Int("complete", 0, "Mark one task as completed")
 
 	flag.Parse()
 
@@ -31,12 +32,20 @@ func main() {
 	case *add:
 		task, err := getTask(os.Stdin, flag.Args()...)
 		if err != nil {
-
 			fmt.Fprintf(os.Stderr, "error adding new task, %v\n", err)
 			os.Exit(1)
 		}
 
 		ls.Add(task)
+		if err := ls.Save(".todo.json"); err != nil {
+			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
+			os.Exit(1)
+		}
+	case *complete > 0:
+		if err := ls.Complete(*complete); err != nil {
+			fmt.Fprintf(os.Stderr, "Error completing the task, %v\n", err)
+		}
+
 		if err := ls.Save(".todo.json"); err != nil {
 			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
 			os.Exit(1)
