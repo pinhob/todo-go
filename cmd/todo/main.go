@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 
+	"github.com/alexeyco/simpletable"
 	"github.com/pinhob/todo-go"
 )
 
@@ -26,9 +28,30 @@ func main() {
 		os.Exit(1)
 	}
 
+	table := simpletable.New()
+	table.Header = &simpletable.Header{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Text: "#"},
+			{Align: simpletable.AlignCenter, Text: "Task"},
+			{Align: simpletable.AlignCenter, Text: "Complete"},
+		},
+	}
+
+	for k, task := range *ls {
+		r := []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", k+1)},
+			{Align: simpletable.AlignCenter, Text: task.Task},
+			{Align: simpletable.AlignCenter, Text: strconv.FormatBool(task.Done)},
+		}
+
+		table.Body.Cells = append(table.Body.Cells, r)
+	}
+
+	table.SetStyle(simpletable.StyleCompact)
+
 	switch {
 	case *list:
-		fmt.Print(ls)
+		fmt.Println(table.String())
 
 	case *add:
 		task, err := getTask(os.Stdin, flag.Args()...)
