@@ -64,13 +64,13 @@ func TestSaveLoad(t *testing.T) {
 		t.Errorf("Got error '%s' when saving file", err)
 	}
 
-	list, err := ls.Load(fileName)
+	err := ls.Load(fileName)
 
 	if err != nil {
 		t.Errorf("Got error '%s' when loading file", err)
 	}
 
-	got := list[0].Task
+	got := ls[0].Task
 
 	if got != task {
 		t.Errorf("want task %s, got %s", task, got)

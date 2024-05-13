@@ -17,7 +17,11 @@ func main() {
 
 	flag.Parse()
 
-	list := todo.List{}
+	list := &todo.List{}
+	if err := list.Load(".todo.json"); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	switch {
 	case *add:

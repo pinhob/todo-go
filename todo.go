@@ -14,7 +14,7 @@ type item struct {
 	CompletedAt time.Time
 }
 
-type List []*item
+type List []item
 
 func (l *List) Add(task string) {
 	newTask := item{
@@ -24,7 +24,7 @@ func (l *List) Add(task string) {
 		CompletedAt: time.Time{},
 	}
 
-	*l = append(*l, &newTask)
+	*l = append(*l, newTask)
 }
 
 func (l *List) Complete(taskNumber int) error {
@@ -60,24 +60,19 @@ func (l *List) Save(fileName string) error {
 	return os.WriteFile(fileName, list, 0666)
 }
 
-func (l *List) Load(fileName string) (List, error) {
-	list := List{}
+func (l *List) Load(fileName string) error {
 	file, err := os.ReadFile(fileName)
 
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return nil, nil
+			return nil
 		}
-		return nil, err
+		return nil
 	}
 
 	if len(file) == 0 {
-		return nil, nil
+		return nil
 	}
 
-	if err := json.Unmarshal(file, &list); err != nil {
-		return nil, errors.New("error unmarshal json")
-	}
-
-	return list, nil
+	return json.Unmarshal(file, l)
 }
