@@ -27,12 +27,15 @@ func main() {
 	case *add:
 		task, err := getTask(os.Stdin, flag.Args()...)
 		if err != nil {
-			fmt.Errorf("Error adding new task, %v", err)
+
+			fmt.Fprintf(os.Stderr, "error adding new task, %v\n", err)
+			os.Exit(1)
 		}
 
 		list.Add(task)
 		if err := list.Save(".todo.json"); err != nil {
-			fmt.Errorf("Error saving list, %v", err)
+			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
+			os.Exit(1)
 		}
 	}
 }
