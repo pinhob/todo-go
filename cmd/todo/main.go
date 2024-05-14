@@ -40,6 +40,12 @@ func main() {
 		},
 	}
 
+	table.Footer = &simpletable.Footer{
+		Cells: []*simpletable.Cell{
+			{Align: simpletable.AlignCenter, Span: 5, Text: red(fmt.Sprintf("You have %d pending todos", ls.CountPendingTodos()))},
+		},
+	}
+
 	for k, task := range *ls {
 		taskDescription := blue(task.Task)
 
@@ -50,7 +56,7 @@ func main() {
 
 		r := []*simpletable.Cell{
 			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", k+1)},
-			{Align: simpletable.AlignCenter, Text: taskDescription},
+			{Align: simpletable.AlignLeft, Text: taskDescription},
 			{Align: simpletable.AlignCenter, Text: strconv.FormatBool(task.Done)},
 			{Align: simpletable.AlignCenter, Text: task.CreatedAt.Format(time.RFC822)},
 			{Align: simpletable.AlignCenter, Text: task.CompletedAt.Format(time.RFC822)},

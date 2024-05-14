@@ -92,3 +92,14 @@ func (l *List) String() string {
 
 	return formatted
 }
+
+func (l *List) CountPendingTodos() int {
+	var total int
+	for _, t := range *l {
+		if !t.Done {
+			total++
+		}
+	}
+
+	return total
+}
