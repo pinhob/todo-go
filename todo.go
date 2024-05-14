@@ -36,6 +36,7 @@ func (l *List) Complete(taskNumber int) error {
 	}
 
 	ls[taskNumber-1].Done = true
+	ls[taskNumber-1].CompletedAt = time.Now()
 
 	return nil
 }
