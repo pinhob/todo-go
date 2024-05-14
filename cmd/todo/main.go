@@ -15,7 +15,13 @@ import (
 	"github.com/pinhob/todo-go"
 )
 
+var todoFileName = ".todo.json"
+
 func main() {
+	if os.Getenv("TODO_FILENAME") != "" {
+		todoFileName = os.Getenv("TODO_FILENAME")
+	}
+
 	add := flag.Bool("add", false, "Add a new task to your list")
 	list := flag.Bool("list", false, "List all all tasks from your list")
 	complete := flag.Int("complete", 0, "Mark one task as completed")
@@ -79,7 +85,7 @@ func main() {
 		}
 
 		ls.Add(task)
-		if err := ls.Save(".todo.json"); err != nil {
+		if err := ls.Save(todoFileName); err != nil {
 			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
 			os.Exit(1)
 		}
@@ -88,7 +94,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error completing the task, %v\n", err)
 		}
 
-		if err := ls.Save(".todo.json"); err != nil {
+		if err := ls.Save(todoFileName); err != nil {
 			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
 			os.Exit(1)
 		}
@@ -97,7 +103,7 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error deleting the task, %v\n", err)
 		}
 
-		if err := ls.Save(".todo.json"); err != nil {
+		if err := ls.Save(todoFileName); err != nil {
 			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
 			os.Exit(1)
 		}
