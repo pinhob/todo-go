@@ -41,9 +41,16 @@ func main() {
 	}
 
 	for k, task := range *ls {
+		taskDescription := blue(task.Task)
+
+		if task.Done {
+			taskTextWithCheckMark := fmt.Sprintf("\u2705 %s", task.Task)
+			taskDescription = green(taskTextWithCheckMark)
+		}
+
 		r := []*simpletable.Cell{
 			{Align: simpletable.AlignCenter, Text: fmt.Sprintf("%d", k+1)},
-			{Align: simpletable.AlignCenter, Text: task.Task},
+			{Align: simpletable.AlignCenter, Text: taskDescription},
 			{Align: simpletable.AlignCenter, Text: strconv.FormatBool(task.Done)},
 			{Align: simpletable.AlignCenter, Text: task.CreatedAt.Format(time.RFC822)},
 			{Align: simpletable.AlignCenter, Text: task.CompletedAt.Format(time.RFC822)},
