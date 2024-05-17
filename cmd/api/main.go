@@ -17,24 +17,16 @@ type task struct {
 }
 
 func main() {
+	http.HandleFunc("GET /todos", listTodos)
+	http.HandleFunc("POST /todos", addTodo)
+	http.HandleFunc("DELETE /todos/{id}", handleDeleteTodo)
 	http.HandleFunc("/", handleRoot)
-	http.HandleFunc("/todos", handleTodos)
-	http.HandleFunc("/todos/{id}", handleDeleteTodo)
 	http.ListenAndServe(":8080", nil)
 }
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Bem-vindo à API de tarefas!"))
-}
-
-func handleTodos(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		listTodos(w, r)
-	case http.MethodPost:
-		addTodo(w, r)
-	}
 }
 
 func listTodos(w http.ResponseWriter, r *http.Request) {
