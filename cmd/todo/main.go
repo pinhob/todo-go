@@ -26,8 +26,14 @@ func main() {
 	list := flag.Bool("list", false, "List all all tasks from your list")
 	complete := flag.Int("complete", 0, "Mark one task as completed")
 	del := flag.Int("del", 0, "Delete specified task from your list")
+	update := flag.NewFlagSet("update", flag.ExitOnError)
+	updateTaskId := update.Int("id", 0, "The id of todo to be updated")
+	updateTask := update.String("task", "", "The description of the task to be updated")
 
 	flag.Parse()
+
+	// Parse everything that is after the command `update`
+	update.Parse(os.Args[2:])
 
 	ls := &todo.List{}
 	if err := ls.Load(".todo.json"); err != nil {
@@ -105,6 +111,25 @@ func main() {
 
 		if err := ls.Save(todoFileName); err != nil {
 			fmt.Fprintf(os.Stderr, "Error saving list, %v\n", err)
+			os.Exit(1)
+		}
+	case os.Args[1] == "update":
+		taskDescription := flag.Args()[4:]
+
+		task, err := getTask(os.Stdin, taskDescription...)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error adding new task, %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(*updateTaskId, *updateTask, update.Args())
+
+		if _, err := ls.Update(*updateTaskId, task); err != nil {
+			fmt.Fprintf(os.Stderr, "Check if you follow the order `update -id -task`. Error updating task, %v\n", err)
+		}
+
+		if err := ls.Save(todoFileName); err != nil {
+			fmt.Fprintf(os.Stderr, "Error updating list, %v\n", err)
 			os.Exit(1)
 		}
 	}
