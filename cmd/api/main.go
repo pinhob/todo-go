@@ -20,6 +20,7 @@ func main() {
 	http.HandleFunc("GET /todos", listTodos)
 	http.HandleFunc("POST /todos", addTodo)
 	http.HandleFunc("DELETE /todos/{id}", handleDeleteTodo)
+	http.HandleFunc("PUT /todos/{id}", handleUpdateTodo)
 	http.HandleFunc("/", handleRoot)
 	http.ListenAndServe(":8080", nil)
 }
@@ -91,4 +92,40 @@ func handleDeleteTodo(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(ls)
+}
+
+func handleUpdateTodo(w http.ResponseWriter, r *http.Request) {
+	var task task
+	ls := &todo.List{}
+
+	id, idErr := strconv.Atoi(r.PathValue("id"))
+	if idErr != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(idErr)
+	}
+
+	if err := ls.Load(todoFileName); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	err := json.NewDecoder(r.Body).Decode(&task)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+	}
+
+	updatedTask, updateTaskErr := ls.Update(id, task.Description)
+	if updateTaskErr != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(updateTaskErr)
+	}
+
+	if err := ls.Save(todoFileName); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(updatedTask)
 }
