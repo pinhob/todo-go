@@ -98,6 +98,28 @@ func TestTodoCLI(t *testing.T) {
 		}
 	})
 
+	t.Run("update first task", func(t *testing.T) {
+		updatedTask := "updated task"
+
+		cmd := exec.Command(cmdPath, "update", "-id", "1", "-task", updatedTask)
+
+		if err := cmd.Run(); err != nil {
+			t.Fatalf("error adding new task: %s", err)
+		}
+
+		cmdList := exec.Command(cmdPath, "-list")
+		out, err := cmdList.CombinedOutput()
+		if err != nil {
+			t.Fatalf("error updating task: %s", err)
+		}
+
+		outHasUpdatedTask := strings.Contains(string(out), updatedTask)
+
+		if !outHasUpdatedTask {
+			t.Errorf("task '%s' should be in output, but we got %v", updatedTask, outHasUpdatedTask)
+		}
+	})
+
 	t.Run("complete first task", func(t *testing.T) {
 		cmd := exec.Command(cmdPath, "-complete", "1")
 		out, err := cmd.CombinedOutput()
