@@ -53,6 +53,21 @@ func (l *List) Delete(taskNumber int) error {
 	return nil
 }
 
+func (l *List) Update(taskNumber int, taskDescription string) (item, error) {
+	ls := *l
+
+	if taskNumber < 1 || taskNumber > len(ls) {
+		return item{}, errors.New("invalid task number")
+	}
+
+	idx := taskNumber - 1
+	task := &ls[idx]
+
+	task.Task = taskDescription
+
+	return *task, nil
+}
+
 func (l *List) Save(fileName string) error {
 	list, err := json.Marshal(l)
 	if err != nil {

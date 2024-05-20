@@ -55,6 +55,23 @@ func TestDelete(t *testing.T) {
 	}
 }
 
+func TestUpdate(t *testing.T) {
+	ls := todo.List{}
+	description := "task to update"
+	updatedDescription := "updated task"
+
+	ls.Add(description)
+	task, err := ls.Update(1, updatedDescription)
+
+	if err != nil {
+		t.Errorf("task cannot be updated, %v", err)
+	}
+
+	if task.Task != updatedDescription {
+		t.Errorf("task should be equal %v, but got %v", updatedDescription, task.Task)
+	}
+}
+
 func TestSaveLoad(t *testing.T) {
 	ls := todo.List{}
 	task := "task 1"
