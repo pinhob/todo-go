@@ -22,6 +22,16 @@ func main() {
 		todoFileName = os.Getenv("TODO_FILENAME")
 	}
 
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(),
+			"%s tool. A CLI and API build to help organize the work you need to do\n", os.Args[0])
+		fmt.Fprintf(flag.CommandLine.Output(), "Tasks can be added using the commands `./todo -add + task name` or `echo task name' | ./ todo -add`\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2024\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage information:\n")
+
+		flag.PrintDefaults()
+	}
+
 	add := flag.Bool("add", false, "Add a new task to your list")
 	list := flag.Bool("list", false, "List all all tasks from your list")
 	complete := flag.Int("complete", 0, "Mark one task as completed")
