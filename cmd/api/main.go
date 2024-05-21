@@ -83,15 +83,17 @@ func handleDeleteTodo(w http.ResponseWriter, r *http.Request) {
 	if err := ls.Delete(taskNum); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(err)
+		return
 	}
 
 	if err := ls.Save(todoFileName); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(err)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(ls)
+	json.NewEncoder(w).Encode("Item successfully deleted")
 }
 
 func handleUpdateTodo(w http.ResponseWriter, r *http.Request) {
